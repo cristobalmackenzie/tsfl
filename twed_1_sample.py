@@ -43,6 +43,11 @@ if os.path.exists(os.getcwd()+"/"+samples_file):
 lc_paths = open(paths_file, 'r').readlines()
 lc_paths = map(lambda x: x[:-1], lc_paths)  # remove newline char
 
+classes = lcu.get_dataset_classes(dataset=dataset)
+
+# We want to get the same number of samples from each class
+num_per_class = num_samples/len(classes)
+
 print datetime.datetime.now()
 samples = []
 paths = []
@@ -50,7 +55,7 @@ paths = []
 for lc_class in classes:
     print "Sampling "+lc_class
     # Get all the lightcurve file paths for a given class
-    class_paths = [path for path in macho_lc_paths if lc_class in path]
+    class_paths = [path for path in lc_paths if lc_class in path]
     class_lcs = lcu.open_lightcurves(class_paths, dataset=dataset)
     # class_lcs = map(pp.eliminate_lc_noise, class_lcs)
     samples_taken_of_current_class = 0
